@@ -36,7 +36,18 @@ public class DownloadMonitorChart extends JsonRPCHandler {
     public JsonRPCResponseBase exec(MonitorRequest request)
     {
 
+        //security protection
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            return null;
+        }
 
+        if(request.getChart_to_download().contains(".."))
+        {
+            return null;
+        }
+        
         String filename = MonitorBySvcOrIP.getChartDirector()+ File.separator+request.getChart_to_download();
         try {
             File file = new File(filename);
